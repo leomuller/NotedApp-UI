@@ -1,0 +1,43 @@
+<div class="container my-4">
+  <h2 class="mb-4 text-primary fw-bold">Applications List</h2>
+
+  <!-- Loading Indicator -->
+  @if (loading()) {
+    <div class="d-flex justify-content-center my-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  }
+
+  <!-- Error Alert -->
+  @if (errorMessage()) {
+    <div class="alert alert-danger shadow-sm" role="alert">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      {{ errorMessage() }}
+    </div>
+  }
+
+  <!-- Data Display: Card Grid -->
+  @if (!loading() && !errorMessage()) {
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      @for (app of appsList(); track app.appId) {
+        <div class="col">
+          <div class="card h-100 shadow-sm border-0 bg-light">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="card-title fw-bold text-dark mb-0">{{ app.appName }}</h5>
+                <span class="badge bg-secondary">ID: {{ app.appId }}</span>
+              </div>
+              <p class="card-text text-muted">{{ app.appDescription }}</p>
+            </div>
+          </div>
+        </div>
+      } @empty {
+        <div class="col-12">
+          <div class="alert alert-info">No applications found.</div>
+        </div>
+      }
+    </div>
+  }
+</div>
