@@ -1,21 +1,15 @@
-<app-navbar></app-navbar>
-
-<div class="container my-5 text-center">
-  <div class="card shadow-sm p-5 border-0 bg-light">
-    <h1 class="display-4 text-primary fw-bold">Hello World!</h1>
-    <p class="lead text-secondary mt-2">
-      NotedApp is up and running on <strong>Angular 22</strong>.
-    </p>
+@if (!authService.isInitialized()) {
+  <div class="d-flex justify-content-center align-items-center min-vh-100">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Checking session...</span>
+    </div>
   </div>
-</div>
+} @else if (authService.isAuthenticated()) {
+  <app-navbar></app-navbar>
 
-<hr />
-
-
-<app-note-list></app-note-list>
-
-<hr />
-
-
-
-<router-outlet />
+  <div class="container py-3">
+    <router-outlet />
+  </div>
+} @else {
+  <app-login></app-login>
+}

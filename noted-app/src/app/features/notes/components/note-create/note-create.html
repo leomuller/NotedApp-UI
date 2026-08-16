@@ -1,0 +1,75 @@
+<div class="card shadow-sm border-0 mb-4 bg-light">
+  <div class="card-body">
+    <h5 class="card-title fw-bold text-primary mb-3">
+      <i class="bi bi-pencil-square me-2"></i>Create New Note
+    </h5>
+
+    <!-- Error Alert -->
+    @if (errorMessage()) {
+      <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        {{ errorMessage() }}
+        <button type="button" class="btn-close" (click)="errorMessage.set(null)" aria-label="Close"></button>
+      </div>
+    }
+
+    <form [formGroup]="noteForm" (ngSubmit)="onSubmit()">
+      <!-- Title Input -->
+      <div class="mb-3">
+        <label for="noteTitle" class="form-label fw-semibold">Title</label>
+        <input
+          type="text"
+          id="noteTitle"
+          class="form-control"
+          placeholder="Enter note title..."
+          formControlName="noteTitle"
+          [class.is-invalid]="noteForm.get('noteTitle')?.invalid && noteForm.get('noteTitle')?.touched"
+        />
+        @if (noteForm.get('noteTitle')?.touched && noteForm.get('noteTitle')?.hasError('required')) {
+          <div class="invalid-feedback">Title is required.</div>
+        }
+      </div>
+
+      <!-- Text / Content Textarea -->
+      <div class="mb-3">
+        <label for="noteText" class="form-label fw-semibold">Note Content</label>
+        <textarea
+          id="noteText"
+          class="form-control"
+          rows="4"
+          placeholder="Write your note here..."
+          formControlName="noteText"
+          [class.is-invalid]="noteForm.get('noteText')?.invalid && noteForm.get('noteText')?.touched"
+        ></textarea>
+        @if (noteForm.get('noteText')?.touched && noteForm.get('noteText')?.hasError('required')) {
+          <div class="invalid-feedback">Note content is required.</div>
+        }
+      </div>
+
+      <!-- Actions -->
+      <div class="d-flex justify-content-end gap-2">
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          (click)="onCancel()"
+          [disabled]="isSubmitting()"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary d-flex align-items-center gap-2"
+          [disabled]="noteForm.invalid || isSubmitting()"
+        >
+          @if (isSubmitting()) {
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Saving...
+          } @else {
+            <i class="bi bi-check-lg"></i>
+            Save Note
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

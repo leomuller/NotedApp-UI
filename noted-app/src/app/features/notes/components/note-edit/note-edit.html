@@ -1,0 +1,120 @@
+<div class="card shadow-sm border-0 mb-4 bg-light">
+  <div class="card-body">
+    <h5 class="card-title fw-bold text-primary mb-3">
+      <i class="bi bi-pencil-fill me-2"></i>Edit Note
+      @if (noteId()) {
+        <span class="badge bg-secondary ms-2 fs-6">ID: {{ noteId() }}</span>
+      }
+    </h5>
+
+    <!-- Loading Spinner -->
+    @if (loading()) {
+      <div class="d-flex justify-content-center my-4">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading note...</span>
+        </div>
+      </div>
+    }
+
+    <!-- Error Alert -->
+    @if (errorMessage()) {
+      <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        {{ errorMessage() }}
+        <button type="button" class="btn-close" (click)="errorMessage.set(null)" aria-label="Close"></button>
+      </div>
+    }
+
+    <!-- Edit Form -->
+    @if (!loading() && !errorMessage()) {
+      <form [formGroup]="noteForm" (ngSubmit)="onSubmit()">
+        <!-- Title Input -->
+        <div class="mb-3">
+          <label for="noteTitle" class="form-label fw-semibold">Title</label>
+          <input
+            type="text"
+            id="noteTitle"
+            class="form-control"
+            placeholder="Enter note title..."
+            formControlName="noteTitle"
+            [class.is-invalid]="noteForm.get('noteTitle')?.invalid && noteForm.get('noteTitle')?.touched"
+          />
+          @if (noteForm.get('noteTitle')?.touched && noteForm.get('noteTitle')?.hasError('required')) {
+            <div class="invalid-feedback">Title is required.</div>
+          }
+        </div>
+
+        <!-- Text / Content Textarea -->
+        <div class="mb-3">
+          <label for="noteText" class="form-label fw-semibold">Note Content</label>
+          <textarea
+            id="noteText"
+            class="form-control"
+            rows="5"
+            placeholder="Write your note here..."
+            formControlName="noteText"
+            [class.is-invalid]="noteForm.get('noteText')?.invalid && noteForm.get('noteText')?.touched"
+          ></textarea>
+          @if (noteForm.get('noteText')?.touched && noteForm.get('noteText')?.hasError('required')) {
+            <div class="invalid-feedback">Note content is required.</div>
+          }
+        </div>
+
+        <!-- Pinned Checkbox -->
+        <div class="form-check mb-4">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="isPinned"
+            formControlName="isPinned"
+          />
+          <label class="form-check-label fw-semibold" for="isPinned">
+            <i class="bi bi-pin-angle-fill me-1 text-warning"></i> Pin Note
+          </label>
+        </div>
+
+        <!-- Actions -->
+        <div class="d-flex justify-content-between align-items-center">
+          <button
+            type="button"
+            class="btn btn-outline-danger d-flex align-items-center gap-1"
+            (click)="onDelete()"
+            [disabled]="isSubmitting() || isDeleting()"
+          >
+            @if (isDeleting()) {
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Deleting...
+            } @else {
+              <i class="bi bi-trash"></i>
+              Delete Note
+            }
+          </button>
+
+          <div class="d-flex gap-2">
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              (click)="onCancel()"
+              [disabled]="isSubmitting() || isDeleting()"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary d-flex align-items-center gap-2"
+              [disabled]="noteForm.invalid || isSubmitting() || isDeleting()"
+            >
+              @if (isSubmitting()) {
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Saving...
+              } @else {
+                <i class="bi bi-check-lg"></i>
+                Update Note
+              }
+            </button>
+          </div>
+        </div>
+      </form>
+    }
+  </div>
+</div>

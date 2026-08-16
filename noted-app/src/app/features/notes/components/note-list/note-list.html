@@ -1,0 +1,61 @@
+<div class="container my-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-primary fw-bold mb-0">Your notes</h2>
+    <a routerLink="/notes/create" class="btn btn-primary d-flex align-items-center gap-2">
+      <i class="bi bi-plus-lg"></i> Add Note
+    </a>
+  </div>
+
+  <!-- Loading Indicator -->
+  @if (loading()) {
+    <div class="d-flex justify-content-center my-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  }
+
+  <!-- Error Alert -->
+  @if (errorMessage()) {
+    <div class="alert alert-danger shadow-sm" role="alert">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      {{ errorMessage() }}
+    </div>
+  }
+
+  <!-- Data Display: Card Grid -->
+  @if (loading() == false && errorMessage() == null) {
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      @for (curNote of noteList(); track curNote.noteId) {
+        <div class="col">
+          <div class="card h-100 shadow-sm border-0 bg-light d-flex flex-column">
+            <div class="card-body flex-grow-1">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="card-title fw-bold text-dark mb-0 d-flex align-items-center gap-1">
+                  @if (curNote.isPinned) {
+                    <i class="bi bi-pin-angle-fill text-warning" title="Pinned"></i>
+                  }
+                  {{ curNote.noteTitle }}
+                </h5>
+                <span class="badge bg-secondary">ID: {{ curNote.noteId }}</span>
+              </div>
+              <p class="card-text text-muted">{{ curNote.noteText }}</p>
+            </div>
+            <div class="card-footer bg-transparent border-0 pt-0 pb-3 d-flex justify-content-end">
+              <a
+                [routerLink]="['/notes/edit', curNote.noteId]"
+                class="btn btn-sm btn-outline-primary d-flex align-items-center gap-1"
+              >
+                <i class="bi bi-pencil"></i> Edit
+              </a>
+            </div>
+          </div>
+        </div>
+      } @empty {
+        <div class="col-12">
+          <div class="alert alert-info">No notes found.</div>
+        </div>
+      }
+    </div>
+  }
+</div>

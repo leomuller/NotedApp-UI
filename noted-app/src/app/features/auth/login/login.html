@@ -1,0 +1,75 @@
+<div class="login-container d-flex align-items-center justify-content-center min-vh-100 bg-light">
+  <div class="card shadow-sm border-0 login-card p-4 p-md-5">
+    <div class="text-center mb-4">
+      <div class="avatar-icon bg-primary text-white rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3">
+        <i class="bi bi-person-fill fs-2"></i>
+      </div>
+      <h2 class="fw-bold text-dark mb-1">Welcome Back</h2>
+      <p class="text-muted">Please sign in to your NotedApp account</p>
+    </div>
+
+    @if (errorMessage()) {
+      <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        <div>{{ errorMessage() }}</div>
+      </div>
+    }
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+      <div class="mb-3">
+        <label for="loginInput" class="form-label fw-semibold">Login / Username</label>
+        <div class="input-group">
+          <span class="input-group-text bg-white"><i class="bi bi-person"></i></span>
+          <input
+            type="text"
+            id="loginInput"
+            class="form-control"
+            [class.is-invalid]="loginForm.get('login')?.invalid && loginForm.get('login')?.touched"
+            formControlName="login"
+            placeholder="Enter your login"
+            autocomplete="username"
+          />
+        </div>
+        @if (loginForm.get('login')?.invalid && loginForm.get('login')?.touched) {
+          <div class="invalid-feedback d-block">
+            Login is required.
+          </div>
+        }
+      </div>
+
+      <div class="mb-4">
+        <label for="pwdInput" class="form-label fw-semibold">Password</label>
+        <div class="input-group">
+          <span class="input-group-text bg-white"><i class="bi bi-lock"></i></span>
+          <input
+            type="password"
+            id="pwdInput"
+            class="form-control"
+            [class.is-invalid]="loginForm.get('pwd')?.invalid && loginForm.get('pwd')?.touched"
+            formControlName="pwd"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+          />
+        </div>
+        @if (loginForm.get('pwd')?.invalid && loginForm.get('pwd')?.touched) {
+          <div class="invalid-feedback d-block">
+            Password is required.
+          </div>
+        }
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary w-100 py-2 fw-semibold"
+        [disabled]="isLoading()"
+      >
+        @if (isLoading()) {
+          <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          Signing in...
+        } @else {
+          <i class="bi bi-box-arrow-in-right me-2"></i> Sign In
+        }
+      </button>
+    </form>
+  </div>
+</div>

@@ -1,10 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
-import { NotesService } from '../services/notes-service';
-import { AppInfo } from '../models/app-info.model';
+import { RouterLink } from '@angular/router';
+import { NotesService } from '../../services/notes-service';
+import { NoteInfo } from '../../models/note.model';
 
 @Component({
   selector: 'app-note-list',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './note-list.html',
   styleUrl: './note-list.scss',
 })
@@ -12,19 +13,23 @@ export class NoteList {
   private notesService = inject(NotesService);
   
 // Strongly-typed Signals to hold our data and UI states
-  appsList = signal<AppInfo[]>([]);
+  noteList = signal<NoteInfo[]>([]);
   loading = signal<boolean>(true);
   errorMessage = signal<string | null>(null);
 
   ngOnInit(): void {
-    this.notesService.getTestData().subscribe({
+
+    this.loading.set(true);
+    this.errorMessage.set(null);
+    
+    this.notesService.getNoteList().subscribe({
       next: (data) => {
-        this.appsList.set(data);
+        this.noteList.set(data);
         this.loading.set(false);
       },
       error: (err) => {
         console.error('API Error:', err);
-        this.errorMessage.set(`Failed to load apps (${err.status})`);
+        this.errorMessage.set(`Failed to load notes (${err.status})`);
         this.loading.set(false);
       }
     });
