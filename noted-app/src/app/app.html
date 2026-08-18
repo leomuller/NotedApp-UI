@@ -1,10 +1,10 @@
-@if (!authService.isInitialized()) {
+@if (authService.isInitialized() == false) {
   <div class="d-flex justify-content-center align-items-center min-vh-100">
     <div class="spinner-border text-primary" role="status">
       <span class="visually-hidden">Checking session...</span>
     </div>
   </div>
-} @else if (authService.isAuthenticated()) {
+} @else if (authService.isAuthenticated() ==true) {
   <app-navbar></app-navbar>
 
   <div class="container py-3">
