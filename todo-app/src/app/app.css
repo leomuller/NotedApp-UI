@@ -1,0 +1,15 @@
+.app-content {
+  display: block;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.container {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  box-sizing: border-box;
+}

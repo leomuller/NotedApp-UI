@@ -1,0 +1,34 @@
+<h2 mat-dialog-title>{{ data.mode === 'create' ? 'Add To-Do' : 'Edit To-Do' }}</h2>
+
+<mat-dialog-content>
+	<mat-form-field appearance="outline" class="text-field">
+		<mat-label>Text</mat-label>
+		<textarea matInput rows="4" [(ngModel)]="text" placeholder="First line shows in the list"></textarea>
+	</mat-form-field>
+
+	<p class="swatch-label">Color</p>
+	<div class="swatches">
+		@for (pair of colorPairs; track pair.key) {
+			<button
+				type="button"
+				class="swatch"
+				[class.selected]="selectedColor() === pair.key"
+				[style.background-color]="swatchColor(pair.key)"
+				[attr.aria-label]="pair.label"
+				(click)="selectedColor.set(pair.key)"
+			></button>
+		}
+	</div>
+
+	@if (data.mode === 'edit' && data.item) {
+		<p class="updated-date">Last updated {{ data.item.dateUpdated }}</p>
+	}
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+	@if (data.mode === 'edit') {
+		<button mat-button color="warn" (click)="remove()">Remove</button>
+	}
+	<button mat-button (click)="cancel()">Cancel</button>
+	<button mat-flat-button color="primary" (click)="save()">Save</button>
+</mat-dialog-actions>
